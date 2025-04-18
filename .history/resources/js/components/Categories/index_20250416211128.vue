@@ -1,0 +1,1 @@
+Vue.observable({object})
