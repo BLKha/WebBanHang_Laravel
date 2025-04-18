@@ -12,11 +12,11 @@
             <button @click="openCartModal()" class="bg-blue-500 text-dark px-4 py-2 rounded mb-4">
                 Xem giỏ hàng
             </button>
-            <div v-if="loading" class="text-center text-blue-600">Loading products...</div>
+            <div v-if="loading" class="text-center text-blue-600">Loading product...</div>
             <div v-else>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div v-for="product in products" :key="product.id" class="border rounded-lg p-4 shadow-lg">
-                        <img :src="product.img_url" alt="Product image" class="w-full h-48 object-contain mb-4">
+                        <img :src="product.img_url" alt="Product image" class="w-full h-48 object-cover mb-4">
                         <h2 class="text-xl font-semibold">{{ product.name }}</h2>
                         <p class="text-sm text-gray-600">{{ product.description }}</p>
                         <div class="mt-4">
@@ -176,15 +176,13 @@ export default {
                         `http://127.0.0.1:8000/api/products/${this.form.id}`,
                         this.form
                     );
-                    window.location.reload();
                     const updatedProduct = response.data;
                     // Update the product in the local list
                     const index = this.products.findIndex(p => p.id === updatedProduct.id);
                     if (index !== -1) {
                         this.$set(this.products, index, updatedProduct);
                     }
-                   this.fetchProducts();
-                   
+                    this.fetchProducts();
 
 
                 } else {
@@ -194,12 +192,11 @@ export default {
                     this.products.push(newProduct);
                 }
                 this.closeModal();
-                
+
 
             } catch (error) {
                 console.error('Error saving product:', error);
             }
-           
         },
         async fetchProducts() {
             try {
@@ -254,7 +251,7 @@ export default {
         },
         saveCartToLocalStorage() {
             localStorage.setItem('cart', JSON.stringify(this.cart));
-        }, 
+        },
         loadCartFromLocalStorage() {
             const savedCart = localStorage.getItem('cart');
             if (savedCart) {

@@ -51,7 +51,7 @@
 
                      <div class="flex justify-end">
                       <button type="button" @click="closeModal" class="mr-4 text-gray-500">Cancel</button>
-                         <button type="submit" class=" text-dark px-4 py-2 rounded hover:bg-teal-500" >
+                         <button type="submit" class="bg-teal-500 text-dark px-4 py-2 rounded">
                            {{ isEditing ? 'Save Changes' : 'Add brand' }}
                                     </button>
                                 </div>
@@ -132,9 +132,9 @@ import Menu from '../includes/menu.vue';
         },
         async handleSubmit() {
             if (this.isEditing) { //Edit
-                await this.updateBrand();
+                await this.updaterand();
             } else { //Add
-                await this.addBrand();
+                await this.addbrand();
             }
             this.closeModal();
         },

@@ -51,7 +51,7 @@
 
                      <div class="flex justify-end">
                       <button type="button" @click="closeModal" class="mr-4 text-gray-500">Cancel</button>
-                         <button type="submit" class=" text-dark px-4 py-2 rounded hover:bg-teal-500" >
+                         <button type="submit" class=" text-dark px-4 py-2 rounded :hover="bg-teal-500" >
                            {{ isEditing ? 'Save Changes' : 'Add brand' }}
                                     </button>
                                 </div>

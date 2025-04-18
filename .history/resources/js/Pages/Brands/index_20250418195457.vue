@@ -23,7 +23,7 @@
       <td class="border border-gray-300 px-4 py-2 text-center">
         <button @click="openModal(brand)" class="text-teal-600 hover:text-teal-800">Sửa</button>
         |
-        <button @click="deleteBrand(brand.id)" class="text-red-500 hover:text-red-800">Xóa</button>
+        <button @click="deletebrand(brand.id)" class="text-red-500 hover:text-red-800">Xóa</button>
       </td>
 
     </tr>
@@ -51,7 +51,7 @@
 
                      <div class="flex justify-end">
                       <button type="button" @click="closeModal" class="mr-4 text-gray-500">Cancel</button>
-                         <button type="submit" class=" text-dark px-4 py-2 rounded hover:bg-teal-500" >
+                         <button type="submit" class="bg-teal-500 text-dark px-4 py-2 rounded">
                            {{ isEditing ? 'Save Changes' : 'Add brand' }}
                                     </button>
                                 </div>
@@ -117,7 +117,7 @@ import Menu from '../includes/menu.vue';
             this.isModalOpen = false;
         },
 
-        async deleteBrand(id) {
+        async deletebrand(id) {
             try {
                 if (confirm('Are you sure you want to delete this brand?')) {
                     // Make the DELETE request to the API
@@ -132,13 +132,13 @@ import Menu from '../includes/menu.vue';
         },
         async handleSubmit() {
             if (this.isEditing) { //Edit
-                await this.updateBrand();
+                await this.updatebrand();
             } else { //Add
-                await this.addBrand();
+                await this.addbrand();
             }
             this.closeModal();
         },
-        async addBrand() {
+        async addbrand() {
             try {
                 const response = await axios.post("http://127.0.0.1:8000/api/brands", this.form);
                 this.brands.push(response.data); // Add new brand to local list
@@ -146,7 +146,7 @@ import Menu from '../includes/menu.vue';
                 console.error("Error adding brand:", error);
             }
         },
-        async updateBrand() {
+        async updatebrand() {
             try {
                 const response = await axios.put(`http://127.0.0.1:8000/api/brands/${this.form.id}`, this.form);
                 const index = this.brands.findIndex(brand => brand.id === this.form.id);

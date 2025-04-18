@@ -16,7 +16,7 @@
             <div v-else>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div v-for="product in products" :key="product.id" class="border rounded-lg p-4 shadow-lg">
-                        <img :src="product.img_url" alt="Product image" class="w-full h-48 object-contain mb-4">
+                        <img :src="product.img_url" alt="Product image" class="w-full h-48 object- mb-4">
                         <h2 class="text-xl font-semibold">{{ product.name }}</h2>
                         <p class="text-sm text-gray-600">{{ product.description }}</p>
                         <div class="mt-4">

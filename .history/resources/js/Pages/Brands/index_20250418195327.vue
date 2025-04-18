@@ -16,21 +16,21 @@
     </tr>
   </thead>
   <tbody>
-    <tr v-for="brand in brands" :key="brand.id" class="hover:bg-blue-100">
+    <tr v-for="brand in categories" :key="brand.id" class="hover:bg-blue-100">
         <td class="border border-gray-300 px-4 py-2 text-center">{{ brand.id }}</td>
       <td class="border border-gray-300 px-4 py-2 text-center">{{ brand.name }}</td>
       <td class="border border-gray-300 px-4 py-2 text-center">{{ brand.description }}</td>
       <td class="border border-gray-300 px-4 py-2 text-center">
         <button @click="openModal(brand)" class="text-teal-600 hover:text-teal-800">Sửa</button>
         |
-        <button @click="deleteBrand(brand.id)" class="text-red-500 hover:text-red-800">Xóa</button>
+        <button @click="deletebrand(brand.id)" class="text-red-500 hover:text-red-800">Xóa</button>
       </td>
 
     </tr>
    
     </tbody>
     </table>
-        <!-- Modal for adding/editing brands -->
+        <!-- Modal for adding/editing categories -->
         <div v-if="isModalOpen" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
              <div class="bg-white p-6 rounded shadow-lg w-1/3">
                 <h2 class="text-xl font-semibold mb-4">{{ isEditing ? 'Edit brand' : 'Add brand' }}</h2>
@@ -51,7 +51,7 @@
 
                      <div class="flex justify-end">
                       <button type="button" @click="closeModal" class="mr-4 text-gray-500">Cancel</button>
-                         <button type="submit" class=" text-dark px-4 py-2 rounded hover:bg-teal-500" >
+                         <button type="submit" class="bg-teal-500 text-dark px-4 py-2 rounded">
                            {{ isEditing ? 'Save Changes' : 'Add brand' }}
                                     </button>
                                 </div>
@@ -74,7 +74,7 @@ import Menu from '../includes/menu.vue';
         },
         data(){
             return{
-                brands:[],
+                categories:[],
                 loading:true,
                 error:null,
                 isModalOpen:false,
@@ -88,17 +88,17 @@ import Menu from '../includes/menu.vue';
             
         },
         mounted() {
-            this.fetchBrands();
+            this.fetchCategories();
         },
         methods: {
-            async fetchBrands(){
+            async fetchCategories(){
                 try{
-                    const response= await axios.get("http://127.0.0.1:8000/api/brands");
-                    this.brands =response.data;
-                    console.log(this.brands);
+                    const response= await axios.get("http://127.0.0.1:8000/api/categories");
+                    this.categories =response.data;
+                    console.log(this.categories);
                 }catch(error){
-                    console.error("Error fetching brands: ",error);
-                    this.error = "Failed to load brands. Please try again later.";
+                    console.error("Error fetching categories: ",error);
+                    this.error = "Failed to load categories. Please try again later.";
                 }finally{
                     this.loading= false;
                 }
@@ -117,12 +117,12 @@ import Menu from '../includes/menu.vue';
             this.isModalOpen = false;
         },
 
-        async deleteBrand(id) {
+        async deletebrand(id) {
             try {
                 if (confirm('Are you sure you want to delete this brand?')) {
                     // Make the DELETE request to the API
-                    await axios.delete(`http://127.0.0.1:8000/api/brands/${id}`);
-                    this.brands = this.brands.filter(brand => brand.id !== id); // Remove from local state
+                    await axios.delete(`http://127.0.0.1:8000/api/categories/${id}`);
+                    this.categories = this.categories.filter(brand => brand.id !== id); // Remove from local state
                     alert('brand deleted successfully.');
                 }
             } catch (error) {
@@ -132,26 +132,26 @@ import Menu from '../includes/menu.vue';
         },
         async handleSubmit() {
             if (this.isEditing) { //Edit
-                await this.updateBrand();
+                await this.updatebrand();
             } else { //Add
-                await this.addBrand();
+                await this.addbrand();
             }
             this.closeModal();
         },
-        async addBrand() {
+        async addbrand() {
             try {
-                const response = await axios.post("http://127.0.0.1:8000/api/brands", this.form);
-                this.brands.push(response.data); // Add new brand to local list
+                const response = await axios.post("http://127.0.0.1:8000/api/categories", this.form);
+                this.categories.push(response.data); // Add new brand to local list
             } catch (error) {
                 console.error("Error adding brand:", error);
             }
         },
-        async updateBrand() {
+        async updatebrand() {
             try {
-                const response = await axios.put(`http://127.0.0.1:8000/api/brands/${this.form.id}`, this.form);
-                const index = this.brands.findIndex(brand => brand.id === this.form.id);
+                const response = await axios.put(`http://127.0.0.1:8000/api/categories/${this.form.id}`, this.form);
+                const index = this.categories.findIndex(brand => brand.id === this.form.id);
                 if (index !== -1) {
-                    this.brands[index] = response.data; // Update the brand in the local list
+                    this.categories[index] = response.data; // Update the brand in the local list
                 }
             } catch (error) {
                 console.error("Error updating brand:", error);

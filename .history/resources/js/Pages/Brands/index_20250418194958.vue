@@ -1,10 +1,10 @@
 <template>
     <div>
         <Menu></Menu>
-        <h1 class="text-center text-5xl">Quản lý Brand</h1>
-        <div v-if="loading" class="text-center text-blue-600">Loading brands.....</div>
+        <h1 class="text-center text-5xl">Trang thể loại</h1>
+        <div v-if="loading" class="text-center text-blue-600">Loading categories.....</div>
         <div v-else>
-            <button @click="openModal(null)" class="bg-blue-600 text-white px-4 py-2 rounded mb-4">Thêm Brand</button>
+            <button @click="openModal(null)" class="bg-blue-600 text-white px-4 py-2 rounded mb-4">Thêm Loại SP</button>
         
         <table class="table-auto w-full border-collapse boder border-gray-800">
   <thead>
@@ -16,43 +16,43 @@
     </tr>
   </thead>
   <tbody>
-    <tr v-for="brand in brands" :key="brand.id" class="hover:bg-blue-100">
-        <td class="border border-gray-300 px-4 py-2 text-center">{{ brand.id }}</td>
-      <td class="border border-gray-300 px-4 py-2 text-center">{{ brand.name }}</td>
-      <td class="border border-gray-300 px-4 py-2 text-center">{{ brand.description }}</td>
+    <tr v-for="category in categories" :key="category.id" class="hover:bg-blue-100">
+        <td class="border border-gray-300 px-4 py-2 text-center">{{ category.id }}</td>
+      <td class="border border-gray-300 px-4 py-2 text-center">{{ category.name }}</td>
+      <td class="border border-gray-300 px-4 py-2 text-center">{{ category.description }}</td>
       <td class="border border-gray-300 px-4 py-2 text-center">
-        <button @click="openModal(brand)" class="text-teal-600 hover:text-teal-800">Sửa</button>
+        <button @click="openModal(category)" class="text-teal-600 hover:text-teal-800">Sửa</button>
         |
-        <button @click="deleteBrand(brand.id)" class="text-red-500 hover:text-red-800">Xóa</button>
+        <button @click="deleteCategory(category.id)" class="text-red-500 hover:text-red-800">Xóa</button>
       </td>
 
     </tr>
    
     </tbody>
     </table>
-        <!-- Modal for adding/editing brands -->
+        <!-- Modal for adding/editing categories -->
         <div v-if="isModalOpen" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
              <div class="bg-white p-6 rounded shadow-lg w-1/3">
-                <h2 class="text-xl font-semibold mb-4">{{ isEditing ? 'Edit brand' : 'Add brand' }}</h2>
+                <h2 class="text-xl font-semibold mb-4">{{ isEditing ? 'Edit Category' : 'Add Category' }}</h2>
 
                     <form @submit.prevent="handleSubmit">
                          <div class="mb-4">
                           <label for="name" class="block text-sm font-semibold">Name</label>
                               <input type="text" id="name" v-model="form.name"
-                                        class="w-full p-2 border border-gray-300 rounded" placeholder="brand Name"
+                                        class="w-full p-2 border border-gray-300 rounded" placeholder="Category Name"
                                         required />
                                 </div>
 
                          <div class="mb-4">
                              <label for="description" class="block text-sm font-semibold">Description</label>
                              <input type="text" id="description" v-model="form.description"
-                                        class="w-full p-2 border border-gray-300 rounded" placeholder="brand Description" />
+                                        class="w-full p-2 border border-gray-300 rounded" placeholder="Category Description" />
                                 </div>
 
                      <div class="flex justify-end">
                       <button type="button" @click="closeModal" class="mr-4 text-gray-500">Cancel</button>
-                         <button type="submit" class=" text-dark px-4 py-2 rounded hover:bg-teal-500" >
-                           {{ isEditing ? 'Save Changes' : 'Add brand' }}
+                         <button type="submit" class="bg-teal-500 text-dark px-4 py-2 rounded">
+                           {{ isEditing ? 'Save Changes' : 'Add Category' }}
                                     </button>
                                 </div>
                             </form>
@@ -74,7 +74,7 @@ import Menu from '../includes/menu.vue';
         },
         data(){
             return{
-                brands:[],
+                categories:[],
                 loading:true,
                 error:null,
                 isModalOpen:false,
@@ -88,25 +88,25 @@ import Menu from '../includes/menu.vue';
             
         },
         mounted() {
-            this.fetchBrands();
+            this.fetchCategories();
         },
         methods: {
-            async fetchBrands(){
+            async fetchCategories(){
                 try{
-                    const response= await axios.get("http://127.0.0.1:8000/api/brands");
-                    this.brands =response.data;
-                    console.log(this.brands);
+                    const response= await axios.get("http://127.0.0.1:8000/api/categories");
+                    this.categories =response.data;
+                    console.log(this.categories);
                 }catch(error){
-                    console.error("Error fetching brands: ",error);
-                    this.error = "Failed to load brands. Please try again later.";
+                    console.error("Error fetching categories: ",error);
+                    this.error = "Failed to load categories. Please try again later.";
                 }finally{
                     this.loading= false;
                 }
             },
-            openModal(brand) {
-            if (brand) {
+            openModal(category) {
+            if (category) {
                 this.isEditing = true;
-                this.form = { ...brand }; // Pre-fill form for editing
+                this.form = { ...category }; // Pre-fill form for editing
             } else {
                 this.isEditing = false;
                 this.form = { id: null, name: '', description: '' }; // Reset form for adding
@@ -117,44 +117,44 @@ import Menu from '../includes/menu.vue';
             this.isModalOpen = false;
         },
 
-        async deleteBrand(id) {
+        async deleteCategory(id) {
             try {
-                if (confirm('Are you sure you want to delete this brand?')) {
+                if (confirm('Are you sure you want to delete this category?')) {
                     // Make the DELETE request to the API
-                    await axios.delete(`http://127.0.0.1:8000/api/brands/${id}`);
-                    this.brands = this.brands.filter(brand => brand.id !== id); // Remove from local state
-                    alert('brand deleted successfully.');
+                    await axios.delete(`http://127.0.0.1:8000/api/categories/${id}`);
+                    this.categories = this.categories.filter(category => category.id !== id); // Remove from local state
+                    alert('Category deleted successfully.');
                 }
             } catch (error) {
-                console.error('Error deleting brand:', error);
-                alert('Failed to delete brand.');
+                console.error('Error deleting category:', error);
+                alert('Failed to delete category.');
             }
         },
         async handleSubmit() {
             if (this.isEditing) { //Edit
-                await this.updateBrand();
+                await this.updateCategory();
             } else { //Add
-                await this.addBrand();
+                await this.addCategory();
             }
             this.closeModal();
         },
-        async addBrand() {
+        async addCategory() {
             try {
-                const response = await axios.post("http://127.0.0.1:8000/api/brands", this.form);
-                this.brands.push(response.data); // Add new brand to local list
+                const response = await axios.post("http://127.0.0.1:8000/api/categories", this.form);
+                this.categories.push(response.data); // Add new category to local list
             } catch (error) {
-                console.error("Error adding brand:", error);
+                console.error("Error adding category:", error);
             }
         },
-        async updateBrand() {
+        async updateCategory() {
             try {
-                const response = await axios.put(`http://127.0.0.1:8000/api/brands/${this.form.id}`, this.form);
-                const index = this.brands.findIndex(brand => brand.id === this.form.id);
+                const response = await axios.put(`http://127.0.0.1:8000/api/categories/${this.form.id}`, this.form);
+                const index = this.categories.findIndex(category => category.id === this.form.id);
                 if (index !== -1) {
-                    this.brands[index] = response.data; // Update the brand in the local list
+                    this.categories[index] = response.data; // Update the category in the local list
                 }
             } catch (error) {
-                console.error("Error updating brand:", error);
+                console.error("Error updating category:", error);
             }
         },
         }
